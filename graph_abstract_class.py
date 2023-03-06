@@ -14,5 +14,9 @@ class DirectedGraph:
         else:
             self.d_cost = d_cost
 
+    def get_number_of_vertices(self):
+        return len(self.d_in)
+
+
 
 

@@ -1,5 +1,7 @@
 class Console:
 
+    def __init__(self, service):
+        self.__service = service
 
     @staticmethod
     def __menu():
@@ -25,7 +27,7 @@ class Console:
         """)
     def run(self):
         commands = {
-            1: self.__print_number_vertices,
+            1: self.__print_number_of_vertices,
             2: self.__print_set_vertices,
             3: self.__add_vertex,
             4: self.__add_edge,
@@ -44,8 +46,8 @@ class Console:
             17: self.__generate_random_graph
 
         }
+        print(self.__menu())
         while True:
-            print(self.__menu())
             while True:
                 try:
                     command = int(input("Enter a command number: "))
@@ -55,12 +57,15 @@ class Console:
                 except ValueError:
                     print('Invalid command')
             try:
-                commands[command]
+                commands[command]()
             except Exception:
                 pass
+            choice = bool(input("Want to see the menu again(T or F): "))
+            if choice:
+                print(self.__menu())
 
-    def __print_number_vertices(self):
-        pass
+    def __print_number_of_vertices(self):
+        print(f"Number of vertices: {self.__service.get_number_of_vertices()}")
 
     def __print_set_vertices(self):
         pass
@@ -92,7 +97,7 @@ class Console:
     def __print_inbound_edges(self):
         pass
 
-    def __get_cost_edge(self):
+    def __print_cost_edge(self):
         pass
 
     def __modify_cost_edge(self):
@@ -102,7 +107,8 @@ class Console:
         pass
 
     def __read_file(self):
-        pass
+        file_name = input("Enter the file name: ")
+        self.__service.read_from_file_standard(file_name)
 
     def __write_file(self):
         pass
