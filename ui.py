@@ -26,6 +26,7 @@ class Console:
     17. read from text file
     18. write to text file
     19. create random graph
+    20. Make copy graph main graph
         """)
     def run(self):
         commands = {
@@ -47,7 +48,8 @@ class Console:
             16: self.__copy_graph,
             17: self.__read_file,
             18: self.__write_file,
-            19: self.__generate_random_graph
+            19: self.__generate_random_graph,
+            20: self.__make_copy_main_graph
 
         }
         print(self.__menu())
@@ -55,7 +57,7 @@ class Console:
             while True:
                 try:
                     command = int(input("Enter a command number: "))
-                    if command not in range(1,20):
+                    if command not in range(1,21):
                         raise ValueError
                     break
                 except ValueError:
@@ -135,7 +137,7 @@ class Console:
 
     def __modify_cost_edge(self):
         data = [int(integer) for integer in input("Enter the edge you want to modify(vertex_in, vertex_out, new_cost): ").split()]
-        vertices = data[:2]
+        vertices = tuple(data[:2])
         new_cost_edge = data[-1]
         self.__service.set_cost_edge(vertices, new_cost_edge)
 
@@ -154,6 +156,11 @@ class Console:
         number_of_vertices, number_of_edges = input("Enter the number of vertices and edges: ").split()
         self.__service.generate_random_graph(int(number_of_vertices), int(number_of_edges))
         self.__get_set_vertices()
+        self.__get_set_of_edges()
+
+    def __make_copy_main_graph(self):
+        self.__service.make_copy_graph_main_graph()
+
 
 
 

@@ -1,3 +1,4 @@
+import random
 from random import randint
 
 COST = 2
@@ -12,20 +13,18 @@ class Service:
         self.graph_copy = None
 
     def read_from_file_standard(self, file_name):
-        d_in = {}
-        d_out = {}
-        d_cost = {}
+        self.graph = DirectedGraph()
         with open(file_name) as file:
             content = file.readlines()
-            for vertex in range(int(content[0].split()[0])):
-                d_in[vertex] = []
-                d_out[vertex] = []
             for line in content[1:]:
                 line = [int(value) for value in line.split()]
-                d_out[line[VERTEX_OUT]].append(line[VERTEX_IN])
-                d_in[line[VERTEX_IN]].append(line[VERTEX_OUT])
-                d_cost[(line[VERTEX_OUT], line[VERTEX_IN])] = line[COST]
-        self.graph = DirectedGraph(d_cost=d_cost, d_out=d_out, d_in=d_in)
+                try:
+                    self.graph.add_vertex(line[VERTEX_IN])
+                    self.graph.add_vertex(line[VERTEX_OUT])
+                except ValueError:
+                    pass
+                self.graph.add_edge((line[VERTEX_OUT], line[VERTEX_IN]), line[COST])
+
 
     def write_to_file_standard(self, file_name):
         if self.graph is None:
@@ -100,16 +99,22 @@ class Service:
         return self.graph.get_inbound_edges(vertex)
 
     def generate_random_graph(self, number_of_vertices, number_of_edges):
-        if number_of_edges > ((number_of_vertices-1)*number_of_vertices)/2:
+        if number_of_edges > number_of_vertices**2:
             raise ValueError("Invalid number of edges")
         random_graph = DirectedGraph()
         for vertex in range(number_of_vertices):
             random_graph.add_vertex(vertex)
         for edge in range(number_of_edges):
-            vertex_in = randint(0,number_of_vertices)
-            vertex_out = randint(0,number_of_vertices)
-            edge_cost = randint(1,50)
-            random_graph.add_edge((vertex_in,vertex_out), edge_cost)
+            while True:
+                vertex_in = random.choice(list(random_graph.d_in.keys()))
+                vertex_out = random.choice(list(random_graph.d_in.keys()))
+                edge_cost = randint(1, 50)
+                try:
+                    random_graph.add_edge((vertex_in, vertex_out), edge_cost)
+                except Exception:
+                    pass
+                else:
+                    break
         self.graph = random_graph
 
     def remove_vertex(self, vertex):
@@ -127,6 +132,10 @@ class Service:
             raise ValueError("No graph in memory")
         self.graph_copy = self.graph.copy_graph()
 
+    def make_copy_graph_main_graph(self):
+        if self.graph_copy is None:
+            raise ValueError("No graph copy in memory")
+        self.graph, self.graph_copy = self.graph_copy, self.graph
 
 
 

@@ -5,7 +5,6 @@ class DirectedGraph:
             self.d_in = {}
         else:
             self.d_in = d_in
-
         if d_out is None:
             self.d_out = {}
 
@@ -38,10 +37,12 @@ class DirectedGraph:
         if edge_vertices in list(self.d_cost.keys()):
             return True
         return False
+
     def add_vertex(self, vertex):
         if self.is_vertex(vertex):
             raise ValueError("Vertex already exists")
         self.d_in[vertex] = []
+        self.d_out[vertex] = []
 
     def add_edge(self, edge_vertices, edge_cost):
         if self.is_edge(edge_vertices):
@@ -50,7 +51,7 @@ class DirectedGraph:
             raise ValueError("One or both vertices doesn't exist")
         self.d_in[edge_vertices[1]].append(edge_vertices[0])
         self.d_out[edge_vertices[0]].append(edge_vertices[1])
-        self.d_cost[edge_vertices]=edge_cost
+        self.d_cost[edge_vertices] = edge_cost
 
     def remove_vertex(self, vertex):
         if not self.is_vertex(vertex):
@@ -68,8 +69,8 @@ class DirectedGraph:
         if not self.is_edge(edge_vertices):
             raise ValueError("Edge doesn't exist")
         self.d_cost.pop(edge_vertices)
-        self.d_out[edge_vertices[0]].pop(edge_vertices[1])
-        self.d_in[edge_vertices[1]].pop(edge_vertices[0])
+        self.d_out[edge_vertices[0]].remove(edge_vertices[1])
+        self.d_in[edge_vertices[1]].remove(edge_vertices[0])
 
     def get_in_degree(self, vertex):
         return len(self.d_in[vertex])
@@ -105,14 +106,3 @@ class DirectedGraph:
         for edge in list(self.d_cost.keys()):
             copy_graph.d_cost[edge] = self.d_cost[edge]
         return copy_graph
-
-
-
-
-
-
-
-
-
-
-
