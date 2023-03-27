@@ -57,7 +57,7 @@ class Service:
             for edge in edges:
                 file.write(f'{edge[0]}' + ' ' + f'{edge[1]}' + ' ' + f'{self.get_cost_edge(edge)}' + '\n' )
             for vertex in self.graph.d_in.keys():
-                if len(self.graph.d_in[vertex]) == 0:
+                if len(self.graph.d_in[vertex]) == 0 and len(self.graph.d_out[vertex] == 0):
                     file.write(f'{vertex}' + ' ' + '-1' + ' ' + '\n')
 
 
