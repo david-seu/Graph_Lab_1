@@ -25,8 +25,10 @@ class Console:
     16. copy graph
     17. read from text file
     18. write to text file
-    19. create random graph
-    20. Make copy graph main graph
+    19. read from text file standard
+    20. write to text file standard
+    21. create random graph
+    22. Make copy graph main graph
         """)
     def run(self):
         commands = {
@@ -48,8 +50,10 @@ class Console:
             16: self.__copy_graph,
             17: self.__read_file,
             18: self.__write_file,
-            19: self.__generate_random_graph,
-            20: self.__make_copy_main_graph
+            19: self.__read_file_standard,
+            20: self.__write_file_standard,
+            21: self.__generate_random_graph,
+            22: self.__make_copy_main_graph
 
         }
         print(self.__menu())
@@ -57,7 +61,7 @@ class Console:
             while True:
                 try:
                     command = int(input("Enter a command number: "))
-                    if command not in range(1,21):
+                    if command not in range(1,23):
                         raise ValueError
                     break
                 except ValueError:
@@ -66,16 +70,16 @@ class Console:
                 commands[command]()
             except Exception as error:
                 print(error)
-            #choice = input("Want to see the menu again(T or F): ")
-            #if choice == "T":
-                #print(self.__menu())
+            choice = input("Want to see the menu again(T or F): ").upper()
+            if choice == "T":
+                print(self.__menu())
 
     def __print_number_of_vertices(self):
         print(f"Number of vertices: {self.__service.get_number_of_vertices()}")
 
     def __get_set_vertices(self):
         print("The set of vertices is: ")
-        print(self.__service.get_set_of_vertices())
+        print(sorted(self.__service.get_set_of_vertices()))
 
 
     def __print_number_of_edges(self):
@@ -144,11 +148,19 @@ class Console:
     def __copy_graph(self):
         self.__service.copy_graph()
 
-    def __read_file(self):
+    def __read_file_standard(self):
         file_name = input("Enter the file name: ")
         self.__service.read_from_file_standard(file_name)
 
+    def __read_file(self):
+        file_name = input("Enter the file name: ")
+        self.__service.read_from_file(file_name)
+
     def __write_file(self):
+        file_name = input("Enter the file name: ")
+        self.__service.write_to_file(file_name)
+
+    def __write_file_standard(self):
         file_name = input("Enter the file name: ")
         self.__service.write_to_file_standard(file_name)
 

@@ -11,19 +11,33 @@ class Service:
     def __init__(self):
         self.graph = None
         self.graph_copy = None
-
     def read_from_file_standard(self, file_name):
         self.graph = DirectedGraph()
         with open(file_name) as file:
             content = file.readlines()
+            for vertex in range(int(content[0].split()[0])):
+                self.add_vertex(vertex)
             for line in content[1:]:
                 line = [int(value) for value in line.split()]
-                try:
-                    self.graph.add_vertex(line[VERTEX_IN])
-                    self.graph.add_vertex(line[VERTEX_OUT])
-                except ValueError:
-                    pass
                 self.graph.add_edge((line[VERTEX_OUT], line[VERTEX_IN]), line[COST])
+    def read_from_file(self, file_name):
+        self.graph = DirectedGraph()
+        with open(file_name) as file:
+            content = file.readlines()
+            for line in content:
+                line = [int(value) for value in line.split()]
+                if line[VERTEX_IN] == -1:
+                    self.graph.add_vertex(line[VERTEX_OUT])
+                else:
+                    try:
+                        self.graph.add_vertex(line[VERTEX_IN])
+                    except ValueError:
+                        pass
+                    try:
+                        self.graph.add_vertex(line[VERTEX_OUT])
+                    except ValueError:
+                        pass
+                    self.graph.add_edge((line[VERTEX_OUT], line[VERTEX_IN]), line[COST])
 
 
     def write_to_file_standard(self, file_name):
@@ -34,6 +48,18 @@ class Service:
             edges = self.graph.get_set_of_edges()
             for edge in edges:
                 file.write(f'{edge[0]}' + ' ' + f'{edge[1]}' + ' ' + f'{self.get_cost_edge(edge)}' + '\n' )
+
+    def write_to_file(self, file_name):
+        if self.graph is None:
+            raise ValueError("No graph in memory")
+        with open(file_name,'w') as file:
+            edges = self.graph.get_set_of_edges()
+            for edge in edges:
+                file.write(f'{edge[0]}' + ' ' + f'{edge[1]}' + ' ' + f'{self.get_cost_edge(edge)}' + '\n' )
+            for vertex in self.graph.d_in.keys():
+                if len(self.graph.d_in[vertex]) == 0:
+                    file.write(f'{vertex}' + ' ' + '-1' + ' ' + '\n')
+
 
     def get_number_of_edges(self):
         if self.graph is None:
