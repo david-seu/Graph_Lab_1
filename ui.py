@@ -5,7 +5,7 @@ class Console:
 
     @staticmethod
     def __menu():
-        return("""
+        return ("""
     Commands:
     1. get the number of vertices
     2. get set of vertices
@@ -29,7 +29,9 @@ class Console:
     20. write to text file standard
     21. create random graph
     22. Make copy graph main graph
+    23. Get lowest length path between 2 vertices
         """)
+
     def run(self):
         commands = {
             1: self.__print_number_of_vertices,
@@ -53,7 +55,8 @@ class Console:
             19: self.__read_file_standard,
             20: self.__write_file_standard,
             21: self.__generate_random_graph,
-            22: self.__make_copy_main_graph
+            22: self.__make_copy_main_graph,
+            23: self.__get_lowest_length_path
 
         }
         print(self.__menu())
@@ -61,7 +64,7 @@ class Console:
             while True:
                 try:
                     command = int(input("Enter a command number: "))
-                    if command not in range(1,23):
+                    if command not in range(1, 24):
                         raise ValueError
                     break
                 except ValueError:
@@ -81,7 +84,6 @@ class Console:
         print("The set of vertices is: ")
         print(sorted(self.__service.get_set_of_vertices()))
 
-
     def __print_number_of_edges(self):
         print(f"Number of edges: {self.__service.get_number_of_edges()}")
 
@@ -93,13 +95,11 @@ class Console:
         vertex = int(input("Enter the label of the vertex: "))
         self.__service.add_vertex(vertex)
 
-
     def __add_edge(self):
         edge = [int(vertex) for vertex in input("Enter the edge (vertex_in, vertex_out, cost): ").split()]
         edge_vertices = tuple(edge[:2])
         edge_cost = edge[-1]
         self.__service.add_edge(edge_vertices, edge_cost)
-
 
     def __remove_vertex(self):
         vertex = int(input("Enter the vertex: "))
@@ -117,7 +117,7 @@ class Console:
             print("Edge doesn't exist")
 
     def __print_in_degree(self):
-        vertex= int(input("Enter the vertex: "))
+        vertex = int(input("Enter the vertex: "))
         print(self.__service.get_in_degree(vertex))
 
     def __print_out_degree(self):
@@ -127,8 +127,7 @@ class Console:
     def __print_outbound_edges(self):
         vertex = int(input("Enter the vertex: "))
         print("The set of target vertices is: ")
-        print(self.__service.get_outbound_edges(vertex),sep=' ')
-
+        print(self.__service.get_outbound_edges(vertex), sep=' ')
 
     def __print_inbound_edges(self):
         vertex = int(input("Enter the vertex: "))
@@ -140,7 +139,8 @@ class Console:
         print(self.__service.get_cost_edge(edge_vertices))
 
     def __modify_cost_edge(self):
-        data = [int(integer) for integer in input("Enter the edge you want to modify(vertex_in, vertex_out, new_cost): ").split()]
+        data = [int(integer) for integer in
+                input("Enter the edge you want to modify(vertex_in, vertex_out, new_cost): ").split()]
         vertices = tuple(data[:2])
         new_cost_edge = data[-1]
         self.__service.set_cost_edge(vertices, new_cost_edge)
@@ -173,9 +173,6 @@ class Console:
     def __make_copy_main_graph(self):
         self.__service.make_copy_graph_main_graph()
 
-
-
-
-
-
-
+    def __get_lowest_length_path(self):
+        vertex1, vertex2 = input("Enter the start and end vertices: ").split()
+        print(self.__service.get_lowest_length_path(int(vertex1), int(vertex2)))

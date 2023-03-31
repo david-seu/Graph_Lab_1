@@ -1,3 +1,6 @@
+import queue
+
+
 class DirectedGraph:
 
     def __init__(self, d_in=None, d_out=None, d_cost=None):
@@ -106,3 +109,46 @@ class DirectedGraph:
         for edge in list(self.d_cost.keys()):
             copy_graph.d_cost[edge] = self.d_cost[edge]
         return copy_graph
+    """
+    Queue q
+        Dictionary prev
+        Dictionary dist
+        Set visited
+        q.enqueue(s)
+        visited.add(s)
+        dist[s] = 0
+        while not q.isEmpty() do
+            x = q.dequeue()
+            for y in Nout(x) do
+                if y not in visited then
+                    q.enqueue(y)
+                    visited.add(y)
+                    dist[y] = dist[x] + 1
+                    prev[y] = x
+                end if
+            end for
+        end while
+        accessible = visited
+    """
+    def get_all_accessible_vertices(self, vertex):
+        q = queue.Queue()
+        prev = {}
+        dist = {}
+        visited = set()
+        q.put(vertex)
+        visited.add(vertex)
+        dist[vertex] = 0
+        while not q.empty():
+            x = q.get()
+            for y in self.d_out[x]:
+                if y not in visited:
+                    q.put(y)
+                    visited.add(y)
+                    dist[y] = dist[x] + 1
+                    prev[y] = x
+        return visited, dist
+
+
+
+
+
