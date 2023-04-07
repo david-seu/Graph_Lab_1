@@ -167,9 +167,14 @@ class Service:
         self.graph, self.graph_copy = self.graph_copy, self.graph
 
     def get_lowest_length_path(self, vertex1, vertex2):
-        accessible, length = self.graph.get_all_accessible_vertices(vertex1)
+        accessible, length, previous = self.graph.get_all_accessible_vertices(vertex1)
         try:
-            return length[vertex2]
+            path = [vertex2]
+            vertex = vertex2
+            while path[-1] != vertex1:
+                path.append(previous[vertex])
+                vertex = previous[vertex]
+            path.reverse()
+            return path
         except KeyError:
             raise ValueError("Vertex is not accessible")
-

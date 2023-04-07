@@ -146,7 +146,7 @@ class DirectedGraph:
                     visited.add(y)
                     dist[y] = dist[x] + 1
                     prev[y] = x
-        return visited, dist
+        return visited, dist, prev
 
 
 
