@@ -1,4 +1,5 @@
 import queue
+import math
 
 
 class DirectedGraph:
@@ -109,46 +110,35 @@ class DirectedGraph:
         for edge in list(self.d_cost.keys()):
             copy_graph.d_cost[edge] = self.d_cost[edge]
         return copy_graph
-    """
-    Queue q
-        Dictionary prev
-        Dictionary dist
-        Set visited
-        q.enqueue(s)
-        visited.add(s)
-        dist[s] = 0
-        while not q.isEmpty() do
-            x = q.dequeue()
-            for y in Nout(x) do
-                if y not in visited then
-                    q.enqueue(y)
-                    visited.add(y)
-                    dist[y] = dist[x] + 1
-                    prev[y] = x
-                end if
-            end for
-        end while
-        accessible = visited
-    """
-    def get_all_accessible_vertices(self, vertex):
+
+    def get_all_accessible_vertices(self, vertex1, vertex2):
         q = queue.Queue()
         prev = {}
-        dist = {}
         visited = set()
-        q.put(vertex)
-        visited.add(vertex)
-        dist[vertex] = 0
+        q.put(vertex1)
+        visited.add(vertex1)
         while not q.empty():
             x = q.get()
             for y in self.d_out[x]:
                 if y not in visited:
                     q.put(y)
                     visited.add(y)
-                    dist[y] = dist[x] + 1
                     prev[y] = x
-        return visited, dist, prev
+                    if y == vertex2:
+                        break
+        return prev
 
-
-
-
-
+    def calculate_minimum_cost_walk(self, vertex_s):
+        dist = {vertex_s: 0}
+        prev = {}
+        for vertex in self.d_in.keys():
+            dist[vertex] = math.inf
+        changed = True
+        while changed:
+            changed = False
+            for (x, y) in self.d_cost.keys():
+                if dist[y] > dist[x] + self.d_cost[(x, y)]:
+                    dist[y] = dist[x] + self.d_cost[(x, y)]
+                    prev[y] = x
+                    changed = True
+        return dist, prev

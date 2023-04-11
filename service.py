@@ -167,7 +167,7 @@ class Service:
         self.graph, self.graph_copy = self.graph_copy, self.graph
 
     def get_lowest_length_path(self, vertex1, vertex2):
-        accessible, length, previous = self.graph.get_all_accessible_vertices(vertex1)
+        previous = self.graph.get_all_accessible_vertices(vertex1, vertex2)
         try:
             path = [vertex2]
             vertex = vertex2
@@ -175,6 +175,10 @@ class Service:
                 path.append(previous[vertex])
                 vertex = previous[vertex]
             path.reverse()
+            path.append(len(path)-1)
             return path
         except KeyError:
             raise ValueError("Vertex is not accessible")
+
+    def get_minimum_cost_walk(self, vertex1, vertex2):
+        prev = self.graph.calc

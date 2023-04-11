@@ -175,4 +175,6 @@ class Console:
 
     def __get_lowest_length_path(self):
         vertex1, vertex2 = input("Enter the start and end vertices: ").split()
-        print(self.__service.get_lowest_length_path(int(vertex1), int(vertex2)))
+        path = self.__service.get_lowest_length_path(int(vertex1), int(vertex2))
+        print(f"Path: {path[:-1]}")
+        print(f"Length: {path[-1]}")
