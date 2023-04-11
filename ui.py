@@ -30,6 +30,7 @@ class Console:
     21. create random graph
     22. Make copy graph main graph
     23. Get lowest length path between 2 vertices
+    24. Get get minimum cost walk between 2 vertices
         """)
 
     def run(self):
@@ -56,7 +57,8 @@ class Console:
             20: self.__write_file_standard,
             21: self.__generate_random_graph,
             22: self.__make_copy_main_graph,
-            23: self.__get_lowest_length_path
+            23: self.__get_lowest_length_path,
+            24: self.__get_minimum_cost_walk
 
         }
         print(self.__menu())
@@ -64,7 +66,7 @@ class Console:
             while True:
                 try:
                     command = int(input("Enter a command number: "))
-                    if command not in range(1, 24):
+                    if command not in range(1, 25):
                         raise ValueError
                     break
                 except ValueError:
@@ -78,7 +80,7 @@ class Console:
                 print(self.__menu())
 
     def __print_number_of_vertices(self):
-        print(f"Number of vertices: {self.__service.get_number_of_vertices()}")
+        print(f"Number of vertices: {self.__service.get_number_of_vertices}")
 
     def __get_set_vertices(self):
         print("The set of vertices is: ")
@@ -178,3 +180,10 @@ class Console:
         path = self.__service.get_lowest_length_path(int(vertex1), int(vertex2))
         print(f"Path: {path[:-1]}")
         print(f"Length: {path[-1]}")
+
+    def __get_minimum_cost_walk(self):
+        vertex1, vertex2 = input("Enter the start and end vertices: ").split()
+        path = self.__service.get_minimum_cost_walk(int(vertex1), int(vertex2))
+        print(f"Path: {path[:-1]}")
+        print(f"Length cost: {path[-1]}")
+

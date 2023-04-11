@@ -1,3 +1,4 @@
+import math
 import random
 from random import randint
 
@@ -70,7 +71,7 @@ class Service:
     def get_number_of_vertices(self):
         if self.graph is None:
             raise ValueError("No graph in memory")
-        return self.graph.get_number_of_vertices()
+        return self.graph.get_number_of_vertices
 
     def get_set_of_edges(self):
         if self.graph is None:
@@ -181,4 +182,17 @@ class Service:
             raise ValueError("Vertex is not accessible")
 
     def get_minimum_cost_walk(self, vertex1, vertex2):
-        prev = self.graph.calc
+        previous, walks_costs = self.graph.calculate_minimum_cost_walk(vertex1)
+        try:
+            if walks_costs[vertex2] == math.inf:
+                raise KeyError
+            path = [vertex2]
+            vertex = vertex2
+            while path[-1] != vertex1:
+                path.append(previous[vertex])
+                vertex = previous[vertex]
+            path.reverse()
+            path.append(walks_costs[vertex2])
+            return path
+        except KeyError:
+            raise ValueError("Vertex is not accessible")
