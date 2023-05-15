@@ -182,8 +182,8 @@ class Service:
             raise ValueError("Vertex is not accessible")
 
     def get_minimum_cost_walk(self, vertex1, vertex2):
-        previous, walks_costs = self.graph.calculate_minimum_cost_walk(vertex1)
         try:
+            previous, walks_costs = self.graph.calculate_minimum_cost_walk(vertex1)
             if walks_costs[vertex2] == math.inf:
                 raise KeyError
             path = [vertex2]
@@ -196,3 +196,5 @@ class Service:
             return path
         except KeyError:
             raise ValueError("Vertex is not accessible")
+        except ValueError:
+            raise ValueError("Negative cost cycle")

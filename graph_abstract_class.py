@@ -292,11 +292,16 @@ class DirectedGraph:
             dist[vertex] = math.inf
         dist[vertex1] = 0
         changed = True
-        while changed:
+        for _ in range(self.get_number_of_vertices()-1):
             changed = False
             for (x, y) in self.d_cost.keys():
                 if dist[y] > dist[x] + self.d_cost[(x, y)]:
                     dist[y] = dist[x] + self.d_cost[(x, y)]
                     prev[y] = x
                     changed = True
-        return prev, dist
+            if not changed:
+                return prev, dist
+        for _ in range(self.get_number_of_vertices()-1):
+            for (x, y) in self.d_cost.keys():
+                if dist[y] > dist[x] + self.d_cost[(x, y)]:
+                     raise ValueError("Negative cost cycle")
